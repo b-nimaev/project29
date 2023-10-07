@@ -20,119 +20,32 @@ import { Translation, voteModel } from './models/ISentence';
 import { IUser, User } from './models/IUser';
 import { ExtraEditMessageText } from 'telegraf/typings/telegram-types';
 import { InlineQueryResult } from 'telegraf/typings/core/types/typegram';
-import { greeting } from './bot/views/home.scene';
 const stage: any = new Scenes.Stage<rlhubContext>([home], { default: 'home' });
 
 console.log('hi')
 
-async function ps_greeting(ctx: rlhubContext) {
-
-    let users: IUser[] | null = await User.find()
-
-    if (users) {
-
-        users.forEach(async (user: IUser) => {
-
-            if (user.interface_language) {
-
-                ctx.scene.session.interface_ln = user.interface_language
-
-            } else {
-
-                ctx.scene.session.interface_ln = 'russian'
-
-            }
-
-            let keyboard_translates: any = {
-                learns: {
-                    russian: 'Самоучитель',
-                    english: 'Learns',
-                    buryat: 'Заабари'
-                },
-                dictionary: {
-                    russian: 'Словарь',
-                    english: 'Dictionary',
-                    buryat: 'Толи'
-                },
-                sentences: {
-                    russian: 'Предложения',
-                    english: 'Sentences',
-                    buryat: 'Мэдуулэлнуд'
-                },
-                translator: {
-                    russian: 'Переводчик',
-                    english: 'Translator',
-                    buryat: 'Оршуулгари'
-                },
-                moderation: {
-                    russian: 'Модерация',
-                    english: 'Moderation',
-                    buryat: 'Зохисуулал'
-                },
-                dashboard: {
-                    russian: 'Личный кабинет',
-                    english: 'Dashboard',
-                    buryat: 'Оорын таhaг'
-                }
-            }
-
-            const extra: ExtraEditMessageText = {
-                parse_mode: 'HTML',
-                reply_markup: {
-                    inline_keyboard: [
-                        [
-                            { text: keyboard_translates.learns[ctx.scene.session.interface_ln], callback_data: "study" },
-                            { text: keyboard_translates.dictionary[ctx.scene.session.interface_ln], callback_data: "vocabular" }
-                        ],
-                        [{ text: keyboard_translates.sentences[ctx.scene.session.interface_ln], callback_data: 'sentences' }],
-                        [{ text: keyboard_translates.translator[ctx.scene.session.interface_ln], callback_data: 'translater' }],
-                        [{ text: keyboard_translates.moderation[ctx.scene.session.interface_ln], callback_data: 'moderation' }],
-                        [{ text: "🔓 Chat GPT", callback_data: "chatgpt" }],
-                        [{ text: keyboard_translates.dashboard[ctx.scene.session.interface_ln], callback_data: "dashboard" }],
-                    ]
-                }
-            }
-
-            let message: any = {
-                russian: `Самоучитель бурятского языка \n\nКаждое взаимодействие с ботом, \nвлияет на сохранение и дальнейшее развитие <b>Бурятского языка</b> \n\nВыберите раздел, чтобы приступить`,
-                buryat: `Буряд хэлэнэ заабари \n\nКаждое взаимодействие с ботом, \nвлияет на сохранение и дальнейшее развитие <b>Бурятского языка</b> \n\nЭхилхиин, нэгэ юумэ дарагты`,
-                english: `Buryat Language Tutorial \n\nEvery interaction with the bot affects the preservation and further development of the Buryat language \n\nChoose a section to start`,
-            }
-
-            try {
-
-                // ctx.updateType === 'message' ? await ctx.reply(message, extra) : false
-                ctx.updateType === 'callback_query' ? await ctx.editMessageText(message[ctx.scene.session.interface_ln], extra) : ctx.reply(message[ctx.scene.session.interface_ln], extra)
-
-            } catch (err) {
-
-                console.log(err)
-
-            }
-
-        });
-
-    }
-
-}
-
 bot.use(session())
 bot.use(stage.middleware())
-bot.start(async (ctx) => {
-    await ctx.scene.enter('home')
-    // ctx.deleteMessage(874)
-})
 
-bot.action(/./, async function (ctx: rlhubContext) {
-    // await ctx.scene.enter('home')
-    ctx.answerCbQuery()
-    await greeting(ctx, true)
-})
-
-bot.on("message", async (ctx) => {
-    if (ctx.updateType === 'message') {
-        console.log(ctx.update)
+bot.on('channel_post', async (ctx) => {
+    if (ctx.updateType === 'channel_post') {
+        if (ctx.update.channel_post.message_id) {
+            
+            const users = await User.find()
+            for (let i = 0; i < users.length; i++) {
+                await ctx.copyMessage(users[i].id)
+                console.log(users[i].id + ' отправлено')
+            }
+            // await ctx.copyMessage(1272270574)
+            // ctx.update.channel_post.message_id
+        }
     }
+})
+bot.on("message", async (ctx) => {
+    console.log(ctx.update)
+    // if (ctx.updateType === 'message') {
+        // console.log(ctx.update)
+    // }
 })
 
 bot.command('update_translates_collection', async (ctx) => {

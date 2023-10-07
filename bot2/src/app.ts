@@ -7,7 +7,7 @@ const PORT = process.env.PORT;
 
 const app = express();
 
-export const secretPath = `/telegraf/secret_path/bot1`;
+export const secretPath = `/telegraf/secret_path/bot2`;
 
 app.use(bodyParser.json());
 
@@ -53,7 +53,7 @@ async function set_webhook() {
     if (`${process.env.mode?.replace(/"/g, '')}` === "production") {
         console.log(`${process.env.mode?.replace(/"/g, '')}`)
         console.log(`prod secret path: ${secretPath}`)
-        await bot.telegram.setWebhook(`https://profori.pro` + secretPath)
+        await bot.telegram.setWebhook(`https://serversp.ru` + secretPath)
             .then((status) => {
                 console.log('webhook setted status: ' + status);
             }).catch(err => {

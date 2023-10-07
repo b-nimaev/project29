@@ -7,7 +7,7 @@ const password = encodeURIComponent(<string>process.env.password?.replace(/"/g, 
 console.log(username)
 console.log(password)
 
-mongoose.connect(`mongodb://${username}:${password}@87.236.22.124:27017/burlang?authSource=admin`, {
+mongoose.connect(`mongodb://${username}:${password}@87.236.22.124:27017/obyavlenia?authSource=admin`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 } as any).catch(error => { console.error(error) });
