@@ -130,10 +130,21 @@ bot.action(/./, async function (ctx: rlhubContext) {
 })
 
 bot.on("message", async (ctx) => {
-    //@ts-ignore
-    await ctx.telegram.sendMessage(`${process.env.chat}`, ctx.update.message.text)
-    await ctx.reply('Ваше объявление опубликовано успешно')
-    await ctx.reply('Можете ещё объявление отправить')
+
+    if (ctx.updateType === 'message') {
+        if (ctx.update.message) {
+
+            //@ts-ignore
+            if (ctx.update.message.text) {
+                //@ts-ignore
+                await ctx.telegram.sendMessage(`${process.env.chat}`, ctx.update.message.text)
+                await ctx.reply('Ваше объявление опубликовано успешно')
+                await ctx.reply('Можете ещё объявление отправить')
+            }
+
+        }
+        
+    }
 })
 
 bot.command('update_translates_collection', async (ctx) => {
