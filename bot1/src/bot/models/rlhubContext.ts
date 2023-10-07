@@ -30,7 +30,7 @@ interface rlhubContext extends Context {
     wizard: Scenes.WizardContextWizard<rlhubContext>,
     update: any,
     message: any,
-    startPayload?: string
+    startPayload?: string,
 }
 
 export default rlhubContext

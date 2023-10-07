@@ -107,7 +107,27 @@ const userSchema: Schema<IUser> = new Schema<IUser>({
     timestamps: true
 });
 
+interface IMessage {
+    message_id: number,
+    user_id: number
+}
+const blackSchema: Schema<{ user_id: { type: number, required: true } }> = new Schema<{ user_id: { type: number, required: true } }>({
+    user_id: { type: Number, required: true }
+})
 const User = model<IUser>('User', userSchema);
+const blacks = model<{ user_id: { type: number, required: true } }>('black', blackSchema);
+const messageSchema: Schema<IMessage> = new Schema<IMessage>({
+    message_id: { type: Number, required: true },
+    user_id: { type: Number, required: true },
+})
+interface IStop {
+    word: string
+}
+const stopSchema: Schema<IStop> = new Schema<IStop>({
+    word: { type: String, required: true }
+})
+const MessageModel = model<IMessage>('Message', messageSchema);
+const stopModel = model<IStop>('stop', stopSchema);
 const ProposedProposalModel = model<IProposedProposal>('Proposed_proposals', proposedProposalSchema)
 
-export { User, IUser, ProposedProposalModel }
+export { User, IUser, ProposedProposalModel, MessageModel, blacks, stopModel }
