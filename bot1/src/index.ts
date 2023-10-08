@@ -197,11 +197,18 @@ bot.on("message", async (ctx) => {
                 let splitted = text.split(' ')
                 for (let i = 0; i < splitted.length; i++) {
                     let word = splitted[i].toLowerCase()
-                    if (arr_inc.indexOf(word) !== -1) {
-                        await ctx.reply('Вы нарушаете правила')
-                        // await new blacks({ user_id: ctx.from.id }).save()
-                        return false
+
+                    for (let z = 0; z < arr_inc.length; z++) {
+
+                        if (arr_inc[z].indexOf(word) !== -1) {
+     
+                            await ctx.reply('Вы нарушаете правила')
+                            return false
+
+                        }
+
                     }
+
                 }
 
                 if (exi) {

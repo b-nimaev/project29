@@ -29,5 +29,13 @@ const userSchema: Schema<IUser> = new Schema<IUser>({
 
 const User = model<IUser>('User', userSchema);
 const ProposedProposalModel = model<IProposedProposal>('Proposed_proposals', proposedProposalSchema)
+interface IMessage {
+    message_id: number
+}
 
-export { User, IUser, ProposedProposalModel }
+const messageSchema: Schema<IMessage> = new Schema<IMessage>({
+    message_id: { type: Number, required: true }
+})
+const MessageModel = model<IMessage>('Message', messageSchema);
+
+export { User, IUser, ProposedProposalModel, MessageModel }
